@@ -2,9 +2,11 @@
 # mock providers come from guestack-launcher, checked out next to this repository at a pinned tag.
 name: test
 
+# Runs on pushes to this repository only. There is deliberately no pull_request trigger; if
+# outside contributions are accepted later, add it back together with fork-PR approval for all
+# external contributors.
 on:
   push:
-  pull_request:
 
 permissions:
   contents: read
