@@ -53,7 +53,7 @@ async function consent(page, scenario) {
   await page.click(`a[data-scenario="${scenario}"]`);
 }
 
-const verify = (jwt) => verifyGuestackJwt(jwt, { publicJwk: E.config.JWT_PUBLIC_JWK, iss: E.pageOrigin, aud: E.rpOrigin });
+const verify = (jwt) => verifyGuestackJwt(jwt, { publicJwk: E.config.JWT_PUBLIC_JWK, aud: E.rpOrigin });
 const authHits = async () => (await (await fetch(`${E.mockBase}/__stats`)).json()).authHits.google;
 
 test("IIFE build: login → Google → back; handler gets the JWT once; fragment stripped", async () => {

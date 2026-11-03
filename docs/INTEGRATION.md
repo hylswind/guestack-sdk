@@ -77,7 +77,7 @@ Your backend, not the browser, decides whether to trust the JWT. It must:
 
 1. Use the ES256 public key published in the attested launch record of the Guestack instance, pinned in your configuration. Never fetch the key from a URL at runtime.
 2. Check the signature, `alg` is `ES256`, and `kid` matches the pinned key.
-3. Check `iss` equals the Guestack page URL from the same launch record, `aud` equals your site's origin exactly (for example `https://shop.example`), `iat` is not in the future (60 seconds of skew), and `exp` has not passed. JWTs live for 5 minutes.
+3. Check `aud` equals your site's origin exactly (for example `https://shop.example`), `iat` is not in the future (60 seconds of skew), and `exp` has not passed. JWTs live for 5 minutes. There is no `iss` claim: the pinned key is what identifies the Guestack instance, so a JWT signed by any other key must already have failed step 2.
 4. Check `session` equals a value your backend issued, has not been used, and is less than 10 minutes old. Then mark it used.
 5. Use `sub` (43 base64url characters) as the visitor's ID. It is stable for your origin for the life of the Guestack instance.
 
