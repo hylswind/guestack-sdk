@@ -1,0 +1,41 @@
+# Lint, unit and build tests, and browser E2E against the real API and page. The API, page and
+# mock providers come from guestack-launcher, checked out next to this repository at a pinned tag.
+name: test
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  LAUNCHER_REPO: hylswind/guestack-launcher
+  LAUNCHER_REF: stack-v1 # tag of the launcher whose test/lib/stack.js interface this SDK expects
+  WRANGLER_SEND_METRICS: "false"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: guestack-sdk
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: ${{ env.LAUNCHER_REPO }}
+          ref: ${{ env.LAUNCHER_REF }}
+          path: guestack-launcher
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: guestack-sdk/package-lock.json
+      - run: npm ci
+        working-directory: guestack-sdk
+      - run: npx playwright install --with-deps chromium
+        working-directory: guestack-sdk
+      - run: npm test
+        working-directory: guestack-sdk
+        env:
+          GUESTACK_STACK_DIR: ${{ github.workspace }}/guestack-launcher

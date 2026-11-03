@@ -1,0 +1,22 @@
+{
+  "name": "guestack-sdk",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Guestack browser SDK for relying parties. No runtime dependencies; this manifest exists only for dev tooling.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "lint": "bash scripts/lint.sh",
+    "build": "node build.mjs --release",
+    "build:phase1": "node build.mjs --phase1",
+    "test:node": "node --test test/unit/*.test.js",
+    "test:e2e": "node test/run-e2e.js",
+    "test": "npm run lint && npm run test:node && npm run test:e2e"
+  },
+  "devDependencies": {
+    "playwright": "1.64.1"
+  }
+}
